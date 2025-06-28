@@ -1,0 +1,36 @@
+.ic-imdb {
+
+}
+
+.ic-rottentomatoes {
+
+}
+
+.ic-allocine {
+
+}
+
+.ic-rating {
+    height: 20px;
+    margin-right: 5px;
+}
+
+.val-rating {
+    font-size: 14px;
+}
+
+.rating-line {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+    height: 20px;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    margin-right: 1.25rem;
+}
+
+
+
