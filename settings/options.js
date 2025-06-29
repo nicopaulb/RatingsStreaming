@@ -1,23 +1,32 @@
 function saveOptions(e) {
   e.preventDefault();
+
+  var options = {};
+  // Cache duration
+  options["cacheLife"] = document.querySelector("#cacheLife").value;
+  // Ratings source
+  options["enabledSource"] = Array.from(document.querySelectorAll("input[type=checkbox][name=ratingSource]:checked")).map((source) => source.value)
+
   browser.storage.local.set({
-    cacheLife: document.querySelector("#cacheLife").value,
+    options: options,
   });
+  browser.runtime.reload();
 }
 
-function restoreOptions() {
-  function setCurrentChoice(result) {
-    document.querySelector("#cacheLife").value = result.cacheLife || "604800000";
-  }
+async function restoreOptions() {
+  options = (await browser.storage.local.get("options")).options || {};
 
-  function onError(error) {
-    console.log(`Error: ${error}`);
-  }
+  // Cache duration
+  document.querySelector("#cacheLife").value = options.cacheLife || "604800000";
 
-  let getting = browser.storage.local.get("cacheLife");
-  getting.then(setCurrentChoice, onError);
+  // Ratings source
+  if(options.enabledSource) {
+    document.querySelectorAll("input[type=checkbox][name=ratingSource]").forEach((source) => {
+        source.checked = options.enabledSource.includes(source.value);
+    });
+  }
 }
 
-console.log("options");
+
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);

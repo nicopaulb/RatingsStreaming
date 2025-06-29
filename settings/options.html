@@ -6,7 +6,7 @@
 
   <body>
     <form>
-      <label for="cacheLife">Cache duration:</label>
+      <label for="cacheLife">Cache duration :</label>
       <select id="cacheLife" name="cacheLife">
         <option value="0">Disabled</option>
         <option value="3600000">1 hour</option>
@@ -14,6 +14,13 @@
         <option value="604800000">1 week</option>
         <option value="2629746000">1 month</option>
       </select>
+      <br>
+      <label for="ratingSource">Rating source :</label>
+      <input type="checkbox" name="ratingSource" value="IMDb" checked> IMDb
+      <input type="checkbox" name="ratingSource" value="RottenTomatoes" checked> Rotten Tomatoes
+      <input type="checkbox" name="ratingSource" value="Allocine" checked> Allocine
+
+      <br>
       <button type="submit">Save</button>
     </form>
 

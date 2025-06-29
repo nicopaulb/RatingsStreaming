@@ -1,10 +1,3 @@
-main();
-
-async function main() {
-  await addRatings(document);
-  createDialogSubscription();
-}
-
 async function createDialogSubscription() {
   const targetNode = document.getElementById("application-main-content");
   const config = { childList: true, subtree: true };
@@ -26,6 +19,12 @@ async function createDialogSubscription() {
   observer.observe(targetNode, config);
 }
 
+const addRatingFunc = {
+  IMDb: addImdbRating,
+  RottenTomatoes: addRottenTomatoesRating,
+  Allocine: addAlloCineRating,
+};
+
 async function addRatings(mediaNode) {
   var reviewNode = mediaNode.querySelector("ul[class^='Reviews']");
   if (reviewNode) {
@@ -39,11 +38,18 @@ async function addRatings(mediaNode) {
     reviewNode.parentNode.appendChild(ratingsLine);
 
     const title = getTitle(mediaNode);
-    ratings = await fetchAll(["Allocine", "IMDb", "RottenTomatoes"], title);
+    const ratingsSource = getRatingsSource();
+    const ratings = await fetchAllRatings(ratingsSource, title);
 
-    addImdbRating(ratingsLine, ratings["IMDb"]);
-    addRottenTomatoesRating(ratingsLine, ratings["RottenTomatoes"]);
-    addAlloCineRating(ratingsLine, ratings["Allocine"]);
+    ratingsSource.forEach((ratingName) => {
+        if(addRatingFunc[ratingName]) {
+            console.debug("Adding " + ratingName + " rating to page");
+            addRatingFunc[ratingName](ratingsLine, ratings[ratingName]);
+        }
+        else {
+            console.error("Function to add " + ratingName + " rating not found");
+        }
+    });
   }
 }
 

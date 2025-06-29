@@ -1,0 +1,13 @@
+var config = {};
+
+async function getConfig() {
+  config = (await browser.storage.local.get("options")).options || {};
+}
+
+function getCacheLife() {
+  return config.cacheLife || 604800000;
+}
+
+function getRatingsSource() {
+  return config.enabledSource || ["IMDb", "RottenTomatoes", "Allocine"];
+}

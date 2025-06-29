@@ -1,6 +1,6 @@
-var fetchRatingFunc = [fetchYahooRating, fetchBingRating, fetchGoogleRating];
+const fetchRatingFunc = [fetchYahooRating, fetchBingRating, fetchGoogleRating];
 
-async function fetchAll(ratingsSource, movie) {
+async function fetchAllRatings(ratingsSource, movie) {
   var ratings = {};
 
   if (!movie) {
@@ -19,6 +19,7 @@ async function fetchAll(ratingsSource, movie) {
   }
 
   for (var key in fetchRatingFunc) {
+    console.debug("Executing '" + fetchRatingFunc[key].name + "()' to get ratings from '" + ratingsSource + "'");
     Object.assign(ratings, await fetchRatingFunc[key](movie));
     if (ratingsSource.every((item) => ratings.hasOwnProperty(item))) {
       break;
