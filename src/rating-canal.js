@@ -49,8 +49,13 @@ async function addRatings(mediaNode) {
 
     ratingsSource.forEach((ratingName) => {
       if (addRatingFunc[ratingName]) {
-        console.debug("Adding " + ratingName + " rating to page");
-        addRatingFunc[ratingName](ratingsLine, ratings[ratingName]);
+        if(ratings[ratingName]) {
+            console.debug("Adding " + ratingName + " rating to page");
+            addRatingFunc[ratingName](ratingsLine, ratings[ratingName]);
+        }
+        else {
+            console.error("Failed to find " + ratingName + " rating");
+        }
       } else {
         console.error("Function to add " + ratingName + " rating not found");
       }
