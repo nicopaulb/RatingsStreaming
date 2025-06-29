@@ -12,14 +12,20 @@
   "content_scripts": [
     {
       "matches": ["*://*.canalplus.com/*"],
-      "js": ["src/rating-cache.js", "src/rating-source.js",  "src/rating-canal.js"],
+      "js": [
+        "src/rating-cache.js",
+        "src/rating-source.js",
+        "src/rating-canal.js"
+      ],
       "css": ["css/style.css"]
     }
   ],
-  "permissions" : [ "<all_urls>", "tabs", "storage"] ,
+
+  "permissions": ["<all_urls>", "tabs", "storage"],
+
   "web_accessible_resources": [
-       "icons/imdb.png",
-       "icons/rottentomatoes.png",
-       "icons/allocine.png"
+    "icons/imdb.png",
+    "icons/rottentomatoes.png",
+    "icons/allocine.png"
   ]
 }
