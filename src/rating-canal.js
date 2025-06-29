@@ -1,3 +1,9 @@
+const addRatingFunc = {
+  IMDb: addImdbRating,
+  RottenTomatoes: addRottenTomatoesRating,
+  Allocine: addAlloCineRating,
+};
+
 async function createDialogSubscription() {
   const targetNode = document.getElementById("application-main-content");
   const config = { childList: true, subtree: true };
@@ -5,11 +11,8 @@ async function createDialogSubscription() {
     for (const mutation of mutationList) {
       if (mutation.type === "childList") {
         for (const node of mutation.addedNodes) {
-          if (node.classList.contains("detailV5___x5p_B")) {
-            addRatings(node);
-          } else if (node.nodeName == "DIALOG") {
-            addRatings(node);
-          }
+            addIndividualRatings(node);
+            addMenuRatings(node);
         }
       }
     }
@@ -19,63 +22,75 @@ async function createDialogSubscription() {
   observer.observe(targetNode, config);
 }
 
-const addRatingFunc = {
-  IMDb: addImdbRating,
-  RottenTomatoes: addRottenTomatoesRating,
-  Allocine: addAlloCineRating,
-};
+async function addMenuRatings(strateNode) {
+  var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem']:not([href$='/'])");
+  posters.forEach(async (poster) => {
+    if (poster.querySelector("ul.rating-container-list_rs") != null) {
+      console.debug("Ratings already added to the page.");
+      return;
+    }
+    var ratingsColumn = document.createElement("ul");
+    ratingsColumn.classList.add("rating-container-list_rs");
 
-async function addRatings(mediaNode) {
-  var detailsNode = mediaNode.querySelector(
-    "div[class^='detailV5__informations']"
-  );
+    var container = poster.querySelector("div.z-10");
+    container.appendChild(ratingsColumn);
+
+    var title = poster.querySelector("img[height='100%']").alt;
+    if (title == "") {
+      console.error("Cannot find the media title");
+      return;
+    }
+
+    await addRatings(ratingsColumn, title);
+  });
+}
+
+async function addIndividualRatings(mediaNode) {
+  var detailsNode = mediaNode.querySelector("div[class^='detailV5__informations']");
 
   if (detailsNode) {
     // Media details shown
-    if (isRatingAlreadyAdded(mediaNode)) {
-      console.error("Ratings already added to the page.");
+    if (detailsNode.querySelector("ul.rating-container-details_rs") != null) {
+      console.debug("Ratings already added to the page.");
       return;
     }
 
     var ratingsLine = document.createElement("ul");
-    ratingsLine.classList.add("rating-line_rs");
+    ratingsLine.classList.add("rating-container-details_rs");
 
     var metadataNode = detailsNode.querySelector("div[class^='detailV5__metadatas__left']");
     metadataNode.appendChild(ratingsLine);
 
-    const title = getTitle(mediaNode);
-    const ratingsSource = getRatingsSource();
-    const ratings = await fetchAllRatings(ratingsSource, title);
+    const titleNode = mediaNode.querySelector("h1#immersive-title");
+    if (titleNode.innerText) {
+      title = titleNode.innerText;
+    } else if (titleNode.firstChild.nodeName == "IMG") {
+      title = titleNode.firstChild.alt;
+    } else {
+      console.error("Cannot find the media title");
+      return;
+    }
 
-    ratingsSource.forEach((ratingName) => {
-      if (addRatingFunc[ratingName]) {
-        if(ratings[ratingName]) {
-            console.debug("Adding " + ratingName + " rating to page");
-            addRatingFunc[ratingName](ratingsLine, ratings[ratingName]);
-        }
-        else {
-            console.error("Failed to find " + ratingName + " rating");
-        }
+    await addRatings(ratingsLine, title);
+  }
+}
+
+async function addRatings(container, title) {
+  const ratingsSource = getRatingsSource();
+  const ratings = await fetchAllRatings(ratingsSource, title);
+
+  ratingsSource.forEach((ratingName) => {
+    if (addRatingFunc[ratingName]) {
+      if (ratings[ratingName]) {
+        console.debug("Adding " + ratingName + " rating to page for " + title);
+        addRatingFunc[ratingName](container, ratings[ratingName]);
       } else {
-        console.error("Function to add " + ratingName + " rating not found");
+        console.debug("Failed to find " + ratingName + " rating for " + title);
       }
-    });
-  }
-}
-
-function isRatingAlreadyAdded(mediaNode) {
-  return mediaNode.querySelector("ul.rating-line_rs") != null;
-}
-
-function getTitle(mediaNode) {
-  const titleNode = mediaNode.querySelector("h1#immersive-title");
-  if (titleNode.innerText) {
-    return titleNode.innerText;
-  }
-  if (titleNode.firstChild.nodeName == "IMG") {
-    return titleNode.firstChild.alt;
-  }
-  console.error("Cannot find the media title");
+    } else {
+      console.error("Function to add " + ratingName + " rating not found for " + title);
+    }
+  });
 }
 
 function addImdbRating(root, value) {
@@ -88,7 +103,7 @@ function addImdbRating(root, value) {
   var val = document.createElement("span");
   val.classList.add("val-rating_rs");
   val.classList.add("val-imdb_rs");
-  val.innerText = value + " / 10";
+  val.innerText = value;
 
   rating = document.createElement("li");
   rating.classList.add("rating_rs");
@@ -109,7 +124,7 @@ function addAlloCineRating(root, value) {
   var val = document.createElement("span");
   val.classList.add("val-rating_rs");
   val.classList.add("val-allocine_rs");
-  val.innerText = value + " / 5";
+  val.innerText = value;
 
   rating = document.createElement("li");
   rating.classList.add("rating_rs");
@@ -130,7 +145,7 @@ function addRottenTomatoesRating(root, value) {
   var val = document.createElement("span");
   val.classList.add("val-rating_rs");
   val.classList.add("val-rottentomatoes_rs");
-  val.innerText = value + " %";
+  val.innerText = value + "%";
 
   rating = document.createElement("li");
   rating.classList.add("rating_rs");

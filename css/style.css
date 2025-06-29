@@ -1,12 +1,3 @@
-.ic-imdb_rs {
-}
-
-.ic-rottentomatoes_rs {
-}
-
-.ic-allocine_rs {
-}
-
 .ic-rating_rs {
   height: 20px;
   margin-right: 5px;
@@ -14,16 +5,31 @@
 
 .val-rating_rs {
   font-size: 14px;
+  font-weight: bold;
 }
 
-.rating-line_rs {
+.rating-container-details_rs {
   display: flex;
   flex-wrap: wrap;
   margin-top: 5px;
   height: 20px;
 }
 
-.rating_rs {
+.rating-container-list_rs {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin: 2px;
+  padding: 2px;
+  gap: 2px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: #00000085;
+  border-radius: 5px;
+}
+
+.rating-container-details_rs .rating_rs {
   display: flex;
   align-items: center;
   margin-right: 1.25rem;

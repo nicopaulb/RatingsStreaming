@@ -72,7 +72,7 @@ async function fetchYahooRating(movie) {
       }
     }
   } catch (error) {
-    console.error(error.message);
+    console.debug(error.message);
   }
 
   return ratings;
@@ -126,7 +126,7 @@ async function fetchBingRating(movie) {
       }
     }
   } catch (error) {
-    console.error(error.message);
+    console.debug(error.message);
   }
 
   return ratings;
@@ -171,7 +171,7 @@ async function fetchGoogleRating(movie) {
       }
     }
   } catch (error) {
-    console.error(error.message);
+    console.debug(error.message);
   }
 
   return ratings;

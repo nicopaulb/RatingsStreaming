@@ -2,6 +2,7 @@ main();
 
 async function main() {
   await getConfig();
-  await addRatings(document);
-  createDialogSubscription();
+  await addMenuRatings(document);
+ await addIndividualRatings(document);
+ createDialogSubscription();
 }
