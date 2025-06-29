@@ -26,8 +26,12 @@ const addRatingFunc = {
 };
 
 async function addRatings(mediaNode) {
-  var reviewNode = mediaNode.querySelector("ul[class^='Reviews']");
-  if (reviewNode) {
+  var detailsNode = mediaNode.querySelector(
+    "div[class^='detailV5__informations']"
+  );
+
+  if (detailsNode) {
+    // Media details shown
     if (isRatingAlreadyAdded(mediaNode)) {
       console.error("Ratings already added to the page.");
       return;
@@ -35,26 +39,27 @@ async function addRatings(mediaNode) {
 
     var ratingsLine = document.createElement("ul");
     ratingsLine.classList.add("rating-line_rs");
-    reviewNode.parentNode.appendChild(ratingsLine);
+
+    var metadataNode = detailsNode.querySelector("div[class^='detailV5__metadatas__left']");
+    metadataNode.appendChild(ratingsLine);
 
     const title = getTitle(mediaNode);
     const ratingsSource = getRatingsSource();
     const ratings = await fetchAllRatings(ratingsSource, title);
 
     ratingsSource.forEach((ratingName) => {
-        if(addRatingFunc[ratingName]) {
-            console.debug("Adding " + ratingName + " rating to page");
-            addRatingFunc[ratingName](ratingsLine, ratings[ratingName]);
-        }
-        else {
-            console.error("Function to add " + ratingName + " rating not found");
-        }
+      if (addRatingFunc[ratingName]) {
+        console.debug("Adding " + ratingName + " rating to page");
+        addRatingFunc[ratingName](ratingsLine, ratings[ratingName]);
+      } else {
+        console.error("Function to add " + ratingName + " rating not found");
+      }
     });
   }
 }
 
 function isRatingAlreadyAdded(mediaNode) {
-    return mediaNode.querySelector("ul.rating-line_rs") != null;
+  return mediaNode.querySelector("ul.rating-line_rs") != null;
 }
 
 function getTitle(mediaNode) {
