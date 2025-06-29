@@ -4,10 +4,12 @@ async function addRatingsToCache(movie, ratings) {
   });
 }
 
-async function getRatingsFromCache(movie, maxTime) {
-  cache = await browser.storage.local.get(movie);
+async function getRatingsFromCache(movie) {
+  cache = await browser.storage.local.get([movie, "cacheLife"]);
+  maxCacheDuration = cache.cacheLife;
+
   if (Object.hasOwn(cache, movie)) {
-    if (Date.now() - cache[movie]["timestamp"] > 7 * 24 * 3600 * 1000) {
+    if (Date.now() - cache[movie]["timestamp"] > maxCacheDuration) {
       // Cache expired
       console.log("Cache expired");
       browser.storage.local.remove(movie);
