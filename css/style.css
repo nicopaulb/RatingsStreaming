@@ -1,32 +1,32 @@
-.ic-imdb {
+.ic-imdb_rs {
 
 }
 
-.ic-rottentomatoes {
+.ic-rottentomatoes_rs {
 
 }
 
-.ic-allocine {
+.ic-allocine_rs {
 
 }
 
-.ic-rating {
+.ic-rating_rs {
     height: 20px;
     margin-right: 5px;
 }
 
-.val-rating {
+.val-rating_rs {
     font-size: 14px;
 }
 
-.rating-line {
+.rating-line_rs {
     display: flex;
     flex-wrap: wrap;
     margin-top: 5px;
     height: 20px;
 }
 
-.rating {
+.rating_rs {
     display: flex;
     align-items: center;
     margin-right: 1.25rem;

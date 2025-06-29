@@ -36,7 +36,7 @@ async function addRatings(mediaNode) {
         }
 
         var ratingsLine = document.createElement("ul");
-        ratingsLine.classList.add("rating-line");
+        ratingsLine.classList.add("rating-line_rs");
         reviewNode.parentNode.appendChild(ratingsLine);
     
         const title = getTitle(mediaNode);
@@ -49,7 +49,7 @@ async function addRatings(mediaNode) {
 }
 
 function isRatingAlreadyAdded(mediaNode) {
-    return mediaNode.querySelector("ul.rating-line") != null;
+  return mediaNode.querySelector("ul.rating-line_rs") != null;
 }
 
 function getTitle(mediaNode) {
@@ -67,17 +67,17 @@ function addImdbRating(root, value) {
     if(!value) return;
 
     var icon = document.createElement("img");
-    icon.classList.add("ic-rating");
-    icon.classList.add("ic-imdb");
+    icon.classList.add("ic-rating_rs");
+    icon.classList.add("ic-imdb_rs");
     icon.src = browser.runtime.getURL("icons/imdb.png");
     var val = document.createElement("span");
-    val.classList.add("val-rating");
-    val.classList.add("val-imdb");
+    val.classList.add("val-rating_rs");
+    val.classList.add("val-imdb_rs");
     val.innerText = value + " / 10";
 
     rating = document.createElement("li");
-    rating.classList.add('rating');
-    rating.classList.add('imdb');
+    rating.classList.add('rating_rs');
+    rating.classList.add('imdb_rs');
     rating.appendChild(icon);
     rating.appendChild(val);
 
@@ -88,17 +88,17 @@ function addAlloCineRating(root, value) {
     if(!value) return;
 
     var icon = document.createElement("img");
-    icon.classList.add("ic-rating");
-    icon.classList.add("ic-allocine");
+    icon.classList.add("ic-rating_rs");
+    icon.classList.add("ic-allocine_rs");
     icon.src = browser.runtime.getURL("icons/allocine.png");
     var val = document.createElement("span");
-    val.classList.add("val-rating");
-    val.classList.add("val-allocine");
+    val.classList.add("val-rating_rs");
+    val.classList.add("val-allocine_rs");
     val.innerText = value + " / 5";
 
     rating = document.createElement("li");
-    rating.classList.add('rating');
-    rating.classList.add('allocine');
+    rating.classList.add('rating_rs');
+    rating.classList.add('allocine_rs');
     rating.appendChild(icon);
     rating.appendChild(val);
     
@@ -109,17 +109,17 @@ function addRottenTomatoesRating(root, value) {
     if(!value) return;
 
     var icon = document.createElement("img");
-    icon.classList.add("ic-rating");
-    icon.classList.add("ic-rottentomatoes");
+    icon.classList.add("ic-rating_rs");
+    icon.classList.add("ic-rottentomatoes_rs");
     icon.src = browser.runtime.getURL("icons/rottentomatoes.png");
     var val = document.createElement("span");
-    val.classList.add("val-rating");
-    val.classList.add("val-rottentomatoes");
+    val.classList.add("val-rating_rs");
+    val.classList.add("val-rottentomatoes_rs");
     val.innerText = value + " %";
 
     rating = document.createElement("li");
-    rating.classList.add('rating');
-    rating.classList.add('rottentomatoes');
+    rating.classList.add('rating_rs');
+    rating.classList.add('rottentomatoes_rs');
     rating.appendChild(icon);
     rating.appendChild(val);
     
