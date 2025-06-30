@@ -1,4 +1,2 @@
-# Firefox Extension to add IMDb, Rotten Tomatoes and Allocine ratings on several streaming platforms.
+# Firefox Extension to add IMDb, Rotten Tomatoes and Allocine ratings on [Canal+](https://www.canalplus.com/) streaming platform.
 
-Streaming platform supported :
-- Canal+ : https://www.canalplus.com/
