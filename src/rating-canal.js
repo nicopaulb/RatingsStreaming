@@ -13,7 +13,7 @@ async function createDialogSubscription() {
         for (const node of mutation.addedNodes) {
             addIndividualRatings(node);
             if(getThumbnailRating()) {
-            addMenuRatings(node);
+              addMenuRatings(node);
             }
         }
       }
@@ -26,6 +26,7 @@ async function createDialogSubscription() {
 
 async function addMenuRatings(strateNode) {
   var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem']:not([href$='/'])");
+  var timeout = 0;
   posters.forEach(async (poster) => {
     if (poster.querySelector("ul.rating-container-list_rs") != null) {
       console.debug("Ratings already added to the page.");
@@ -43,7 +44,10 @@ async function addMenuRatings(strateNode) {
       return;
     }
 
-    await addRatings(ratingsColumn, title);
+    setTimeout(function() {
+      addRatings(ratingsColumn, title);
+    }, 1000 * timeout);
+    timeout++;
   });
 }
 
