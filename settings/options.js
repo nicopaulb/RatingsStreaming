@@ -6,6 +6,8 @@ function saveOptions(e) {
   options["cacheLife"] = document.querySelector("#cacheLife").value;
   // Ratings source
   options["enabledSource"] = Array.from(document.querySelectorAll("input[type=checkbox][name=ratingSource]:checked")).map((source) => source.value)
+  // Ratings on thumbnail
+  options["thumbnailRating"] = document.querySelector("input[type=checkbox][name=thumbnailRating]").checked;
 
   browser.storage.local.set({
     options: options,
@@ -18,13 +20,14 @@ async function restoreOptions() {
 
   // Cache duration
   document.querySelector("#cacheLife").value = options.cacheLife || "604800000";
-
   // Ratings source
   if(options.enabledSource) {
     document.querySelectorAll("input[type=checkbox][name=ratingSource]").forEach((source) => {
         source.checked = options.enabledSource.includes(source.value);
     });
   }
+  // Ratings on thumbnail
+  document.querySelector("input[type=checkbox][name=thumbnailRating]").checked = options.thumbnailRating || false;
 }
 
 

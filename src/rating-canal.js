@@ -12,7 +12,9 @@ async function createDialogSubscription() {
       if (mutation.type === "childList") {
         for (const node of mutation.addedNodes) {
             addIndividualRatings(node);
+            if(getThumbnailRating()) {
             addMenuRatings(node);
+            }
         }
       }
     }

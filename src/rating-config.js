@@ -11,3 +11,7 @@ function getCacheLife() {
 function getRatingsSource() {
   return config.enabledSource || ["IMDb", "RottenTomatoes", "Allocine"];
 }
+
+function getThumbnailRating() {
+  return config.thumbnailRating || false;
+}
