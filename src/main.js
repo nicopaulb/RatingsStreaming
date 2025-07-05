@@ -2,9 +2,13 @@ main();
 
 async function main() {
   await getConfig();
-  if(getThumbnailRating()) {
-    await addMenuRatings(document);
+  if (getThumbnailRating()) {
+    addMenuRatings(document);
   }
- await addIndividualRatings(document);
- createDialogSubscription();
+  addIndividualRatings(document);
+  createDialogSubscription();
 }
+
+// Overriding log functions for production
+// console.log = function () {};
+// console.debug = function () {};

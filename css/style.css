@@ -34,3 +34,17 @@
   align-items: center;
   margin-right: 1.25rem;
 }
+
+.loader_rs {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #000000;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin_rs 2s linear infinite;
+}
+
+@keyframes spin_rs {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -11,10 +11,10 @@ async function createDialogSubscription() {
     for (const mutation of mutationList) {
       if (mutation.type === "childList") {
         for (const node of mutation.addedNodes) {
-            addIndividualRatings(node);
-            if(getThumbnailRating()) {
-              addMenuRatings(node);
-            }
+          addIndividualRatings(node);
+          if (getThumbnailRating()) {
+            addMenuRatings(node);
+          }
         }
       }
     }
@@ -26,7 +26,6 @@ async function createDialogSubscription() {
 
 async function addMenuRatings(strateNode) {
   var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem']:not([href$='/'])");
-  var timeout = 0;
   posters.forEach(async (poster) => {
     if (poster.querySelector("ul.rating-container-list_rs") != null) {
       console.debug("Ratings already added to the page.");
@@ -34,6 +33,7 @@ async function addMenuRatings(strateNode) {
     }
     var ratingsColumn = document.createElement("ul");
     ratingsColumn.classList.add("rating-container-list_rs");
+    ratingsColumn.classList.add("loader_rs");
 
     var container = poster.querySelector("div.z-10");
     container.appendChild(ratingsColumn);
@@ -44,10 +44,7 @@ async function addMenuRatings(strateNode) {
       return;
     }
 
-    setTimeout(function() {
-      addRatings(ratingsColumn, title);
-    }, 1000 * timeout);
-    timeout++;
+    addRatings(ratingsColumn, title);
   });
 }
 
@@ -63,6 +60,7 @@ async function addIndividualRatings(mediaNode) {
 
     var ratingsLine = document.createElement("ul");
     ratingsLine.classList.add("rating-container-details_rs");
+    ratingsLine.classList.add("loader_rs");
 
     var metadataNode = detailsNode.querySelector("div[class^='detailV5__metadatas__left']");
     metadataNode.appendChild(ratingsLine);
@@ -77,26 +75,28 @@ async function addIndividualRatings(mediaNode) {
       return;
     }
 
-    await addRatings(ratingsLine, title);
+    addRatings(ratingsLine, title, true);
   }
 }
 
-async function addRatings(container, title) {
-  const ratingsSource = getRatingsSource();
-  const ratings = await fetchAllRatings(ratingsSource, title);
-
-  ratingsSource.forEach((ratingName) => {
-    if (addRatingFunc[ratingName]) {
-      if (ratings[ratingName]) {
-        console.debug("Adding " + ratingName + " rating to page for " + title);
-        addRatingFunc[ratingName](container, ratings[ratingName]);
+async function addRatings(container, title, forceNow = false) {
+  try {
+    const ratings = await ratingQueue.getMovieRating(title, forceNow);
+    container.classList.remove("loader_rs");
+    getRatingsSource().forEach((ratingName) => {
+      if (addRatingFunc[ratingName]) {
+        if (ratings[ratingName]) {
+          addRatingFunc[ratingName](container, ratings[ratingName]);
+        } else {
+          console.debug("Failed to find " + ratingName + " rating for " + title);
+        }
       } else {
-        console.debug("Failed to find " + ratingName + " rating for " + title);
+        console.error("Function to add " + ratingName + " rating not found for " + title);
       }
-    } else {
-      console.error("Function to add " + ratingName + " rating not found for " + title);
-    }
-  });
+    });
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 function addImdbRating(root, value) {

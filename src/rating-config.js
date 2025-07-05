@@ -8,6 +8,14 @@ function getCacheLife() {
   return config.cacheLife || 604800000;
 }
 
+function getRetryDelay() {
+  return config.retryDelay || 3600000;
+}
+
+function getRequestDelay() {
+  return config.requestDelay || 1000;
+}
+
 function getRatingsSource() {
   return config.enabledSource || ["IMDb", "RottenTomatoes", "Allocine"];
 }

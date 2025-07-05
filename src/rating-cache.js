@@ -6,16 +6,22 @@ async function addRatingsToCache(movie, ratings) {
 
 async function getRatingsFromCache(movie) {
   cache = await browser.storage.local.get(movie);
-  maxCacheDuration = getCacheLife();
   if (Object.hasOwn(cache, movie)) {
-    if (Date.now() - cache[movie]["timestamp"] > maxCacheDuration) {
+    if (Object.keys(cache[movie]["ratings"]).length === 0) {
+      // Last tentatives to get ratings failed
+      cacheDuration = getRetryDelay();
+    } else {
+      cacheDuration = getCacheLife();
+    }
+
+    if (Date.now() - cache[movie]["timestamp"] > cacheDuration) {
       // Cache expired
-      console.debug("Cache expired (CacheLife = " + maxCacheDuration + ")");
+      console.debug("Cache expired (CacheLife = " + cacheDuration + ")");
       browser.storage.local.remove(movie);
       return {};
     } else {
       return cache[movie]["ratings"];
     }
   }
-  return {};
+  return null;
 }
