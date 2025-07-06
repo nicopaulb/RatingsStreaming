@@ -79,10 +79,13 @@ async function addIndividualRatings(mediaNode) {
   }
 }
 
-async function addRatings(container, title, forceNow = false) {
+async function addRatings(container, title, forceNow = false, ignoreCache = false) {
   try {
-    const ratings = await ratingQueue.getMovieRating(title, forceNow);
+    const ratings = await ratingQueue.getMovieRating(title, forceNow, ignoreCache);
     container.classList.remove("loader_rs");
+    container.onclick = function () {
+      reloadRatings(container, title);
+    };
     getRatingsSource().forEach((ratingName) => {
       if (addRatingFunc[ratingName]) {
         if (ratings[ratingName]) {
@@ -97,6 +100,16 @@ async function addRatings(container, title, forceNow = false) {
   } catch (error) {
     console.error(error.message);
   }
+}
+
+async function reloadRatings(root, title) {
+  root.onclick = null;
+  root.innerHTML = "";
+  root.classList.add("loader_rs");
+  await addRatings(root, title, true, true);
+  root.onclick = function () {
+    reloadRatings(root, title);
+  };
 }
 
 function addImdbRating(root, value) {

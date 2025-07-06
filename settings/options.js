@@ -7,7 +7,9 @@ function saveOptions(e) {
   // Retry delay
   options["retryDelay"] = document.querySelector("#retryDelay").value;
   // Ratings source
-  options["enabledSource"] = Array.from(document.querySelectorAll("input[type=checkbox][name=ratingSource]:checked")).map((source) => source.value)
+  options["enabledSource"] = Array.from(
+    document.querySelectorAll("input[type=checkbox][name=ratingSource]:checked")
+  ).map((source) => source.value);
   // Ratings on thumbnail
   options["thumbnailRating"] = document.querySelector("input[type=checkbox][name=thumbnailRating]").checked;
 
@@ -25,13 +27,13 @@ async function restoreOptions() {
   // Cache duration
   document.querySelector("#retryDelay").value = options.retryDelay || "3600000";
   // Ratings source
-  if(options.enabledSource) {
+  if (options.enabledSource) {
     document.querySelectorAll("input[type=checkbox][name=ratingSource]").forEach((source) => {
-        source.checked = options.enabledSource.includes(source.value);
+      source.checked = options.enabledSource.includes(source.value);
     });
   }
   // Ratings on thumbnail
-  document.querySelector("input[type=checkbox][name=thumbnailRating]").checked = options.thumbnailRating || false;
+  document.querySelector("input[type=checkbox][name=thumbnailRating]").checked = options.thumbnailRating || true;
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);

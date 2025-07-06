@@ -6,7 +6,7 @@ class RatingQueue {
     this.fetchRatingFunc = [this._fetchYahooRating, this._fetchBingRating, this._fetchGoogleRating];
   }
 
-  async getMovieRating(movieName, forceNow = false) {
+  async getMovieRating(movieName, forceNow = false, ignoreCache = false) {
     if (forceNow) {
       const index = this.queue.findIndex((item) => item.movieName === movieName);
       if (index > -1) {
@@ -27,7 +27,7 @@ class RatingQueue {
       reject = rej;
     });
 
-    var ratings = await getRatingsFromCache(movieName);
+    var ratings = ignoreCache ? null : await getRatingsFromCache(movieName);
     if (ratings != null) {
       console.log("Ratings found from cache for '" + movieName + "' : " + JSON.stringify(ratings));
       resolve(ratings);

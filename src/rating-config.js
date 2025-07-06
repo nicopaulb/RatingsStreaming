@@ -21,5 +21,5 @@ function getRatingsSource() {
 }
 
 function getThumbnailRating() {
-  return config.thumbnailRating || false;
+  return config.thumbnailRating || true;
 }
