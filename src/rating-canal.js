@@ -30,7 +30,8 @@ async function createDialogSubscription() {
 }
 
 async function removeMenuRatingsQueue(strateNode) {
-  var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem']:not([href$='/'])");
+  var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem'][href], li[class^='contentGrid__gridItem'] a[href]");
+  posters = Array.from(posters).filter(a => a.href.match(/\d+$/));
   posters.forEach(async (poster) => {
     if (poster.querySelector("ul.rating-container-list_rs") != null) {
       var title = poster.querySelector("img[height='100%']").alt;
@@ -40,7 +41,8 @@ async function removeMenuRatingsQueue(strateNode) {
 }
 
 async function addMenuRatings(strateNode) {
-  var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem']:not([href$='/'])");
+  var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem'][href], li[class^='contentGrid__gridItem'] a[href]");
+  posters = Array.from(posters).filter(a => a.href.match(/\d+$/));
   posters.forEach(async (poster) => {
     if (poster.querySelector("ul.rating-container-list_rs") != null) {
       console.debug("Ratings already added to the page.");
