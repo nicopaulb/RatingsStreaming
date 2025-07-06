@@ -1,0 +1,5 @@
+{
+  "categories": ["games-entertainment"],
+  "summary": {"en-US" :"Adds IMDb, Rotten Tomatoes and Allocine ratings on Canal+ streaming platform"},
+  "version": { "license": "MPL-2.0" }
+}
