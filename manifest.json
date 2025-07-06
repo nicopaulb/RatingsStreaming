@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Movie ratings for Canal+",
-  "version": "1.0",
+  "version": "1.0.1",
 
   "description": "Adds IMDb, Rotten Tomatoes and Allocine ratings on Canal+ streaming platform",
 
