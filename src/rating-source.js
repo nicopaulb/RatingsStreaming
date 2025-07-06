@@ -45,6 +45,14 @@ class RatingQueue {
     return promise;
   }
 
+  removeMovieRating(movieName) {
+    const index = this.queue.findIndex((item) => item.movieName === movieName);
+    if (index > -1) {
+      const existant = this.queue.splice(index, 1);
+      existant[0].resolve({});
+    }
+  }
+
   async _execute() {
     if (this.queue.length === 0) {
       this.isDequeuing = false;

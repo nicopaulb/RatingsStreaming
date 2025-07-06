@@ -16,12 +16,27 @@ async function createDialogSubscription() {
             addMenuRatings(node);
           }
         }
+        if (getThumbnailRating()) {
+          for (const node of mutation.removedNodes) {
+            removeMenuRatingsQueue(node);
+          }
+        }
       }
     }
   };
 
   const observer = new MutationObserver(callback);
   observer.observe(targetNode, config);
+}
+
+async function removeMenuRatingsQueue(strateNode) {
+  var posters = strateNode.querySelectorAll("a[class^='contentRowTemplateItem']:not([href$='/'])");
+  posters.forEach(async (poster) => {
+    if (poster.querySelector("ul.rating-container-list_rs") != null) {
+      var title = poster.querySelector("img[height='100%']").alt;
+      ratingQueue.removeMovieRating(title);
+    }
+  });
 }
 
 async function addMenuRatings(strateNode) {
